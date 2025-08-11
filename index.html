@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jaktfalk | クラン公式サイト</title>
+    
+    <link rel="icon" href="img/favicon.ico">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet">
+    
+    <style>
+        /* MiSansフォントの読み込み */
+        @font-face {
+            font-family: 'MiSans';
+            src: url('https://sk0528jp.github.io/font/MiSans-Normal.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'PixelMplus12';
+            src: url('https://moji-waku.com/download/PixelMplus12.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* 基本的なリセットとフォント設定 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'MiSans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #2e3b3d; /* 深い森の緑 */
+            color: #dbe4e6;
+            overflow-x: hidden;
+        }
+
+        /* ヘッダー */
+        header {
+            width: 100%;
+            padding: 1rem 5%;
+            background-color: #3b4c52;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        header .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        header .logo-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        header .logo-text {
+            font-family: 'PixelMplus12', 'MiSans', monospace;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #b1d491; /* マインクラフトの草ブロックのような緑 */
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.4); /* マイクラ風ドロップシャドウ */
+        }
+        
+        /* ナビゲーションメニュー (PC用) */
+        header .nav {
+            display: flex;
+            align-items: center;
+        }
+
+        header .nav a {
+            color: #dbe4e6;
+            text-decoration: none;
+            font-size: 1.1rem;
+            margin-left: 30px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        header .nav a:hover {
+            color: #b1d491;
+            transform: scale(1.05);
+        }
+
+        /* ハンバーガーメニュー */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            cursor: pointer;
+            z-index: 1001;
+            padding: 5px;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        
+        .hamburger-menu.open {
+            border-color: #b1d491;
+        }
+        
+        .hamburger-menu .bar {
+            width: 100%;
+            height: 3px;
+            background-color: #b1d491;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* モバイルナビゲーションメニュー */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(46, 59, 61, 0.95);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .mobile-nav.open {
+            transform: translateX(0);
+        }
+        
+        .mobile-nav .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #b1d491;
+            font-size: 3rem;
+            cursor: pointer;
+            z-index: 1001;
+            padding: 10px;
+            transition: color 0.3s ease;
+        }
+        
+        .mobile-nav .close-button:hover {
+            color: #fff;
+        }
+
+        .mobile-nav a {
+            color: #dbe4e6;
+            font-size: 2rem;
+            margin: 20px 0;
+            text-decoration: none;
+        }
+        
+        .mobile-nav .lang-panel-container {
+            margin-top: 20px;
+        }
+
+        /* 言語切り替えパネル */
+        .lang-panel-container {
+            position: relative;
+            margin-left: 20px;
+        }
+        
+        .lang-panel-toggle {
+            background: none;
+            border: 2px solid #b1d491;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #b1d491;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .lang-panel-toggle:hover {
+            background-color: #b1d4911a;
+        }
+        
+        .lang-panel {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #3b4c52;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            margin-top: 10px;
+            padding: 10px;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .lang-panel.open {
+            display: flex;
+        }
+
+        .lang-panel button {
+            background: none;
+            border: none;
+            color: #dbe4e6;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: left;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lang-panel button:hover {
+            background-color: #2e3b3d;
+        }
+        
+        .flag-icon {
+            font-size: 1.2rem;
+        }
+
+        /* メインコンテンツ */
+        main {
+            padding-top: 100px;
+            position: relative; /* アニメーションの基準 */
+            overflow: hidden; /* コンテンツがはみ出さないように */
+        }
+        
+        /* クロスフェード用コンテナ */
+        #content-container {
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://i.imgur.com/k91tQ2H.jpg') no-repeat center center/cover;
+            background-attachment: fixed; /* 視差効果 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+        }
+
+        .hero-content h1 {
+            font-family: 'PixelMplus12', 'MiSans', monospace;
+            font-size: 5rem;
+            text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.6);
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.8rem;
+            font-style: italic;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.4);
+        }
+
+        /* セクション */
+        .section {
+            padding: 80px 5%;
+            text-align: center;
+        }
+        
+        .section.dark-bg {
+            background-color: #273033; /* より深い色 */
+        }
+        
+        .section.light-bg {
+            background-color: #2e3b3d;
+        }
+
+        .section h2 {
+            font-family: 'PixelMplus12', 'MiSans', monospace;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: #b1d491;
+            border-bottom: 3px solid #b1d491;
+            display: inline-block;
+            padding-bottom: 8px;
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
+        }
+
+        .section p {
+            max-width: 900px;
+            margin: 0 auto 2.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .member-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .member-card {
+            background-color: #3b4c52;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .member-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .member-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #b1d491;
+            margin-bottom: 15px;
+            filter: grayscale(20%);
+            transition: filter 0.3s ease;
+        }
+        
+        .member-card:hover img {
+            filter: grayscale(0%);
+        }
+
+        /* メンバー募集セクション */
+        .recruitment-button {
+            display: inline-block;
+            background-color: #b1d491;
+            color: #2e3b3d;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .recruitment-button:hover {
+            background-color: #92b972;
+            transform: scale(1.05);
+        }
+
+        /* フッター */
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            background-color: #3b4c52;
+            color: #dbe4e6;
+            border-top: 2px solid #b1d491;
+        }
+        
+        footer p {
+            font-size: 0.9rem;
+        }
+        
+        footer a {
+            color: #b1d491;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        footer a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        /* スクロールアニメーション */
+        .scroll-fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+        }
+
+        .scroll-fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === レスポンシブデザインの調整 === */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 5%;
+            }
+            
+            header .nav {
+                display: none;
+            }
+            
+            .hamburger-menu {
+                display: flex;
+            }
+
+            header .logo-text {
+                display: none;
+            }
+            
+            header .logo-img {
+                margin-right: 0;
+            }
+            
+            .mobile-nav {
+                display: flex;
+            }
+            
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+
+            .section {
+                padding: 60px 5%;
+            }
+
+            .section h2 {
+                font-size: 2rem;
+            }
+            
+            .section p {
+                font-size: 1rem;
+            }
+
+            .recruitment-button {
+                font-size: 1rem;
+                padding: 12px 24px;
+            }
+
+            .member-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            /* モバイル版では言語切り替えパネルが右に配置されるように調整 */
+            .mobile-nav .lang-panel-container {
+                margin: 20px 0 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">
+            <img src="img/logo.png" alt="Jaktfalk Logo" class="logo-img">
+            <div class="logo-text">Jaktfalk</div>
+        </a>
+        <div class="hamburger-menu" id="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <nav class="nav" id="desktop-nav">
+            <a href="#about" id="nav-about">Jaktfalkとは</a>
+            <a href="#members" id="nav-members">メンバー</a>
+            <a href="#recruitment" id="nav-recruitment">メンバー募集</a>
+            <div class="lang-panel-container" id="lang-panel-container">
+                <button class="lang-panel-toggle" id="lang-toggle">
+                    <span class="flag-icon flag-icon-jp"></span>
+                    <span id="current-lang-text">日本語</span>
+                </button>
+                <div class="lang-panel" id="lang-panel">
+                    <button class="lang-switcher" data-lang="ja">
+                        <span class="flag-icon flag-icon-jp"></span>日本語
+                    </button>
+                    <button class="lang-switcher" data-lang="en">
+                        <span class="flag-icon flag-icon-us"></span>English
+                    </button>
+                    <button class="lang-switcher" data-lang="sv">
+                        <span class="flag-icon flag-icon-se"></span>Svenska
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <nav class="mobile-nav" id="mobile-nav">
+        <button class="close-button" id="close-menu">&times;</button>
+        <a href="#about" id="mobile-nav-about">Jaktfalkとは</a>
+        <a href="#members" id="mobile-nav-members">メンバー</a>
+        <a href="#recruitment" id="mobile-nav-recruitment">メンバー募集</a>
+        <div class="lang-panel-container" id="mobile-lang-panel-container">
+             <button class="lang-panel-toggle" id="mobile-lang-toggle">
+                <span class="flag-icon flag-icon-jp"></span>
+                <span id="mobile-current-lang-text">日本語</span>
+            </button>
+            <div class="lang-panel" id="mobile-lang-panel">
+                <button class="lang-switcher" data-lang="ja">
+                    <span class="flag-icon flag-icon-jp"></span>日本語
+                </button>
+                <button class="lang-switcher" data-lang="en">
+                    <span class="flag-icon flag-icon-us"></span>English
+                </button>
+                <button class="lang-switcher" data-lang="sv">
+                    <span class="flag-icon flag-icon-se"></span>Svenska
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div id="content-container">
+            <section class="hero">
+                <div class="hero-content">
+                    <h1 id="hero-title">Jaktfalk</h1>
+                    <p id="hero-subtitle">狩りの鷹、その名に誓う勝利。</p>
+                </div>
+            </section>
+
+            <section id="about" class="section scroll-fade-in dark-bg">
+                <h2 id="about-title">Jaktfalkとは</h2>
+                <p id="about-text-1">
+                    我々Jaktfalkは、Hiveサーバーを中心に活動するPvPクランです。「狩りの鷹」の名の下、連携を重視した素早い動きと確実な攻撃で、勝利を掴み取ります。
+                </p>
+                <p id="about-text-2">
+                    クランのテーマカラーである深緑は、森に潜む鷹の冷静さと、秘めたる強さを象徴しています。初心者から上級者まで、PvPを楽しみながら高みを目指す仲間を求めています。
+                </p>
+            </section>
+            
+            <section id="members" class="section scroll-fade-in light-bg">
+                <h2 id="members-title">メンバー</h2>
+                <p id="members-text">
+                    我々を支える仲間たちを紹介します。
+                </p>
+                <div class="member-grid">
+                    <div class="member-card">
+                        <img src="https://i.imgur.com/Gj3Hw0M.png" alt="メンバー1">
+                        <h3 id="member-leader-title">Clan Leader</h3>
+                        <p id="member-leader-text">Jaktfalkのリーダー。</p>
+                    </div>
+                    <div class="member-card">
+                        <img src="https://i.imgur.com/Gj3Hw0M.png" alt="メンバー2">
+                        <h3 id="member-member-title-1">Jaktfalk Member</h3>
+                        <p id="member-member-text-1">頼れる戦術家。</p>
+                    </div>
+                    <div class="member-card">
+                        <img src="https://i.imgur.com/Gj3Hw0M.png" alt="メンバー3">
+                        <h3 id="member-member-title-2">Jaktfalk Member</h3>
+                        <p id="member-member-text-2">正確無比な狙撃手。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="recruitment" class="section scroll-fade-in dark-bg">
+                <h2 id="recruitment-title">メンバー募集</h2>
+                <p id="recruitment-text">
+                    私たちと共にPvPの頂点を目指しませんか？ Jaktfalkでは、新たな「鷹」を募集しています。
+                    詳細はDiscordサーバーでご確認ください。
+                </p>
+                <a href="#" class="recruitment-button" id="recruitment-button">Discordに参加する</a>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>
+            <span id="footer-text">&copy; 2025 Jaktfalk All rights reserved.</span>
+            <br>
+            <span id="footer-credit">Web Design by <a href="https://sk0528jp.github.io/" target="_blank">SK0528JP</a></span>
+        </p>
+    </footer>
+
+    <script>
+        // コンテンツの多言語対応データ
+        const translations = {
+            'ja': {
+                'title': 'Jaktfalk | クラン公式サイト',
+                'nav-about': 'Jaktfalkとは',
+                'nav-members': 'メンバー',
+                'nav-recruitment': 'メンバー募集',
+                'mobile-nav-about': 'Jaktfalkとは',
+                'mobile-nav-members': 'メンバー',
+                'mobile-nav-recruitment': 'メンバー募集',
+                'current-lang-text': '日本語',
+                'hero-subtitle': '狩りの鷹、その名に誓う勝利。',
+                'about-title': 'Jaktfalkとは',
+                'about-text-1': '我々Jaktfalkは、Hiveサーバーを中心に活動するPvPクランです。「狩りの鷹」の名の下、連携を重視した素早い動きと確実な攻撃で、勝利を掴み取ります。',
+                'about-text-2': 'クランのテーマカラーである深緑は、森に潜む鷹の冷静さと、秘めたる強さを象徴しています。初心者から上級者まで、PvPを楽しみながら高みを目指す仲間を求めています。',
+                'members-title': 'メンバー',
+                'members-text': '我々を支える仲間たちを紹介します。',
+                'member-leader-title': 'Clan Leader',
+                'member-leader-text': 'Jaktfalkのリーダー。',
+                'member-member-title-1': 'Jaktfalk Member',
+                'member-member-text-1': '頼れる戦術家。',
+                'member-member-title-2': 'Jaktfalk Member',
+                'member-member-text-2': '正確無比な狙撃手。',
+                'recruitment-title': 'メンバー募集',
+                'recruitment-text': '私たちと共にPvPの頂点を目指しませんか？ Jaktfalkでは、新たな「鷹」を募集しています。詳細はDiscordサーバーでご確認ください。',
+                'recruitment-button': 'Discordに参加する',
+                'footer-text': '&copy; 2025 Jaktfalk All rights reserved.',
+                'footer-credit': 'Web Design by <a href="https://sk0528jp.github.io/" target="_blank">SK0528JP</a>'
+            },
+            'sv': { // スウェーデン語
+                'title': 'Jaktfalk | Klanens Officiella Hemsida',
+                'nav-about': 'Om Jaktfalk',
+                'nav-members': 'Medlemmar',
+                'nav-recruitment': 'Rekrytering',
+                'mobile-nav-about': 'Om Jaktfalk',
+                'mobile-nav-members': 'Medlemmar',
+                'mobile-nav-recruitment': 'Rekrytering',
+                'current-lang-text': 'Svenska',
+                'hero-subtitle': 'Jakthök, segern som vi svär i vårt namn.',
+                'about-title': 'Om Jaktfalk',
+                'about-text-1': 'Jaktfalk är en PvP-klan som är aktiv främst på Hive-servern. Under namnet "Jakthök" strävar vi efter seger genom snabba rörelser och exakta attacker, med fokus på lagarbete.',
+                'about-text-2': 'Klanens temafärg, mörkgrönt, symboliserar falkens lugn som lurar i skogen och dess dolda styrka. Vi söker kamrater som vill njuta av PvP och sträva mot toppen, oavsett om de är nybörjare eller avancerade spelare.',
+                'members-title': 'Medlemmar',
+                'members-text': 'Vi presenterar våra kamrater som stöder oss.',
+                'member-leader-title': 'Clan Leader',
+                'member-leader-text': 'Jaktfalks ledare.',
+                'member-member-title-1': 'Jaktfalk Member',
+                'member-member-text-1': 'En pålitlig strateg.',
+                'member-member-title-2': 'Jaktfalk Member',
+                'member-member-text-2': 'En prickskytt med exakt precision.',
+                'recruitment-title': 'Rekrytering',
+                'recruitment-text': 'Vill du nå toppen av PvP med oss? Jaktfalk rekryterar nya "hökar". För mer information, vänligen besök vår Discord-server.',
+                'recruitment-button': 'Gå med i Discord',
+                'footer-text': '&copy; 2025 Jaktfalk Alla rättigheter reserverade.',
+                'footer-credit': 'Web Design by <a href="https://sk0528jp.github.io/" target="_blank">SK0528JP</a>'
+            },
+            'en': { // 英語
+                'title': 'Jaktfalk | Clan Official Website',
+                'nav-about': 'About Jaktfalk',
+                'nav-members': 'Members',
+                'nav-recruitment': 'Recruitment',
+                'mobile-nav-about': 'About Jaktfalk',
+                'mobile-nav-members': 'Members',
+                'mobile-nav-recruitment': 'Recruitment',
+                'current-lang-text': 'English',
+                'hero-subtitle': 'The hunting falcon, victory we swear by its name.',
+                'about-title': 'About Jaktfalk',
+                'about-text-1': 'Jaktfalk is a PvP clan active mainly on the Hive server. Under the name "Hunting Falcon", we aim for victory with swift movements and precise attacks, emphasizing teamwork.',
+                'about-text-2': 'The clan\'s theme color, dark green, symbolizes the calm of a falcon lurking in the forest and its hidden strength. We are looking for comrades who want to enjoy PvP and aim for the top, from beginners to advanced players.',
+                'members-title': 'Members',
+                'members-text': 'Introducing our comrades who support us.',
+                'member-leader-title': 'Clan Leader',
+                'member-leader-text': 'Leader of Jaktfalk.',
+                'member-member-title-1': 'Jaktfalk Member',
+                'member-member-text-1': 'A reliable strategist.',
+                'member-member-title-2': 'Jaktfalk Member',
+                'member-member-text-2': 'A sniper with deadly precision.',
+                'recruitment-title': 'Recruitment',
+                'recruitment-text': 'Would you like to aim for the top of PvP with us? Jaktfalk is recruiting new "falcons". Please check our Discord server for details.',
+                'recruitment-button': 'Join Discord',
+                'footer-text': '&copy; 2025 Jaktfalk All rights reserved.',
+                'footer-credit': 'Web Design by <a href="https://sk0528jp.github.io/" target="_blank">SK0528JP</a>'
+            }
+        };
+
+        let currentLang = 'ja';
+
+        // PC用要素
+        const langPanelToggle = document.getElementById('lang-toggle');
+        const langPanel = document.getElementById('lang-panel');
+        const langSwitchers = document.querySelectorAll('.lang-switcher');
+        const currentLangText = document.getElementById('current-lang-text');
+        const currentLangFlag = langPanelToggle.querySelector('.flag-icon');
+        const contentContainer = document.getElementById('content-container');
+        const langPanelContainer = document.getElementById('lang-panel-container');
+        
+        // モバイル用要素
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('mobile-nav');
+        const closeMenuBtn = document.getElementById('close-menu');
+
+        // コンテンツの翻訳関数
+        function updateContent(lang) {
+            const elements = translations[lang];
+            for (const key in elements) {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.innerHTML = elements[key];
+                }
+            }
+            document.title = elements['title'];
+            document.documentElement.lang = lang;
+            updateToggleFlag(lang);
+        }
+
+        // 言語トグルのフラグとテキストを更新する関数
+        function updateToggleFlag(lang) {
+            const countryCode = lang === 'en' ? 'us' : (lang === 'sv' ? 'se' : 'jp');
+            
+            // PC版とモバイル版の両方を更新
+            document.querySelectorAll('.lang-panel-toggle .flag-icon').forEach(flag => {
+                flag.className = `flag-icon flag-icon-${countryCode}`;
+            });
+            document.getElementById('current-lang-text').textContent = translations[lang]['current-lang-text'];
+            document.getElementById('mobile-current-lang-text').textContent = translations[lang]['current-lang-text'];
+        }
+
+        // 言語切り替えパネルの表示/非表示を切り替える
+        document.querySelectorAll('.lang-panel-toggle').forEach(toggle => {
+            toggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                const parentContainer = toggle.closest('.lang-panel-container');
+                const panel = parentContainer.querySelector('.lang-panel');
+                panel.classList.toggle('open');
+            });
+        });
+
+        // パネル外をクリックしたらパネルを閉じる
+        document.addEventListener('click', (event) => {
+            document.querySelectorAll('.lang-panel.open').forEach(panel => {
+                const parentContainer = panel.closest('.lang-panel-container');
+                if (!parentContainer.contains(event.target)) {
+                    panel.classList.remove('open');
+                }
+            });
+        });
+
+        // 言語切り替えボタンのクリックイベント
+        langSwitchers.forEach(button => {
+            button.addEventListener('click', () => {
+                const newLang = button.getAttribute('data-lang');
+                if (newLang !== currentLang) {
+                    contentContainer.style.opacity = '0';
+                    setTimeout(() => {
+                        currentLang = newLang;
+                        updateContent(currentLang);
+                        contentContainer.style.opacity = '1';
+                    }, 500); // CSSアニメーションの時間と合わせる
+                    document.querySelectorAll('.lang-panel.open').forEach(panel => panel.classList.remove('open'));
+                    mobileNav.classList.remove('open');
+                    hamburger.classList.remove('open');
+                }
+            });
+        });
+        
+        // ハンバーガーメニューの開閉
+        hamburger.addEventListener('click', () => {
+            mobileNav.classList.add('open');
+            hamburger.classList.add('open');
+        });
+        
+        // 閉じるボタンのクリックイベント
+        closeMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.remove('open');
+            hamburger.classList.remove('open');
+        });
+
+        // モバイルナビゲーションのリンクをクリックしたらメニューを閉じる
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNav.classList.remove('open');
+                hamburger.classList.remove('open');
+            });
+        });
+
+        // スクロールアニメーションのJavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            updateContent(currentLang);
+
+            const scrollFadeInElements = document.querySelectorAll('.scroll-fade-in');
+            const observer = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            scrollFadeInElements.forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+
+</body>
+</html>
